@@ -1,0 +1,7 @@
+type AuditStorage = 
+ service {
+   addAudit: (proposalID: text, auditB64: text) -> (opt text);
+   getAudit: (proposalID: text) -> (opt text) query;
+   listAudits: () -> (vec text) query;
+ };
+service : () -> AuditStorage
