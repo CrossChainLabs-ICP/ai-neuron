@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "ai-neuron-backend": {
+      "main": "src/ai-neuron-backend/main.mo",
+      "type": "motoko"
+    },
+    "ai-neuron-frontend": {
+      "dependencies": [
+        "ai-neuron-backend"
+      ],
+      "source": [
+        "src/ai-neuron-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "ai-neuron-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
