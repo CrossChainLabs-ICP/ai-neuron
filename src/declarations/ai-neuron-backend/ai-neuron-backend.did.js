@@ -1,9 +1,9 @@
 export const idlFactory = ({ IDL }) => {
-  const AuditStorage = IDL.Service({
-    'addAudit' : IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(IDL.Text)], []),
-    'getAudit' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], ['query']),
-    'listAudits' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
+  const ReportStorage = IDL.Service({
+    'getReport' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], ['query']),
+    'listReports' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
+    'saveReport' : IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(IDL.Text)], []),
   });
-  return AuditStorage;
+  return ReportStorage;
 };
 export const init = ({ IDL }) => { return []; };

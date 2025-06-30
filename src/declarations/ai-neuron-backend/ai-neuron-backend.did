@@ -1,7 +1,7 @@
-type AuditStorage = 
+type ReportStorage = 
  service {
-   addAudit: (proposalID: text, auditB64: text) -> (opt text);
-   getAudit: (proposalID: text) -> (opt text) query;
-   listAudits: () -> (vec text) query;
+   getReport: (proposalID: text) -> (opt text) query;
+   listReports: () -> (vec text) query;
+   saveReport: (proposalID: text, auditB64: text) -> (opt text);
  };
-service : () -> AuditStorage
+service : () -> ReportStorage

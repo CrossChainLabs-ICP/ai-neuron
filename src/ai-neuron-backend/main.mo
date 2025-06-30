@@ -3,21 +3,21 @@ import Array "mo:base/Array";
 import Text "mo:base/Text";
 import Iter "mo:base/Iter";
 
-shared(msg) actor class AuditStorage() {
-let auditMap = TrieMap.TrieMap<Text, Text>(Text.equal, Text.hash);
+shared(msg) actor class ReportStorage() {
+let reportsMap = TrieMap.TrieMap<Text, Text>(Text.equal, Text.hash);
 
-  public shared({caller}) func addAudit(proposalID : Text, auditB64 : Text) : async ?Text {
-     return auditMap.replace(proposalID, auditB64);
+  public shared({caller}) func saveReport(proposalID : Text, auditB64 : Text) : async ?Text {
+     return reportsMap.replace(proposalID, auditB64);
   };
 
-  // Get one audit by proposalID
-  public query func getAudit(proposalID : Text) : async ?Text {
-    return auditMap.get(proposalID);
+  // Get one report by proposalID
+  public query func getReport(proposalID : Text) : async ?Text {
+    return reportsMap.get(proposalID);
   };
 
-  // List all audits
-  public query func listAudits() : async [Text] {
-    let array = Iter.toArray(auditMap.vals());
+  // List all reports
+  public query func listReports() : async [Text] {
+    let array = Iter.toArray(reportsMap.vals());
     return array;
   };
 }
