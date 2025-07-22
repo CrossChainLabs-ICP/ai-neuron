@@ -12,9 +12,7 @@ import {
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { decode as base64Decode } from 'base-64';
 
-//import { Client } from "../utils/client";
-
-
+import { ClientICP } from "../client-icp.js";
 
 function formatDate(isoDate) {
   const date = new Date(isoDate);
@@ -53,18 +51,21 @@ export default function Dashboard() {
   };
 
 
-  useEffect(() => {
-    const loadReports = async () => {
-        //const client = new Client();
-        /*try {
-          
-         
-        } catch (err) {
-          
-        }*/
-    };
-    loadReports();
-  }, []);
+    useEffect(() => {
+        const loadReports = async () => {
+            try {
+                const client = new ClientICP();
+                const latest_reports = await client.get_full_reports(0, 10);
+                console.log('latest_reports', latest_reports);
+
+
+
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        loadReports();
+    }, []);
 
 
 return (
