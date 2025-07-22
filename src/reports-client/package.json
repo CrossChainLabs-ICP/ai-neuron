@@ -1,0 +1,21 @@
+{
+  "name": "reports-client",
+  "version": "1.0.0",
+  "description": "Reports Client",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test-local": "env-cmd -f ./.env.dev node test.js"
+  },
+  "author": "CROSSCHAIN LABS",
+  "license": "MIT",
+  "dependencies": {
+    "@dfinity/agent": "^3.0.0",
+    "@dfinity/identity": "^3.0.0",
+    "@dfinity/identity-secp256k1": "^3.0.0",
+    "@dfinity/principal": "^3.0.0",
+    "env-cmd": "^10.1.0",
+    "isomorphic-fetch": "^3.0.0",
+    "pem-file": "^1.0.1"
+  }
+}
