@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch";
 import { HttpAgent } from "@dfinity/agent";
 import { createActor } from "../declarations/ai-neuron-backend/index.js";
+import { createActor as createWorkerActor } from "../declarations/ai-neuron-backend-worker/index.js";
 import { Secp256k1KeyIdentity } from "@dfinity/identity-secp256k1";
 
 import { config } from './config.js';
@@ -74,7 +75,7 @@ async function test_saveReport() {
     }
 }
 
-async function test_search() {
+async function test_workers() {
     const identity = getSecp256k1Identity();
 
     const agent = new HttpAgent({
@@ -84,11 +85,22 @@ async function test_search() {
     });
 
     const actor = createActor(config.canister_id, { agent });
+    const workers = await actor.get_workers();
 
-    const r = await actor.search('nft', 1, 0); 
-    console.log(r);
+    console.log(workers);
+
+    for (const w of workers) {
+        const worker = createWorkerActor(w, { agent });
+        const reportIDsList = await worker.get_list();
+        console.log(reportIDsList);
+        for ( const id of reportIDsList ) {
+            const fullReport = await worker.get_items([id]);
+            console.log(fullReport);
+        }
+    }
 }
 
 (async () => {
-    await test_saveReport();
+    //await test_saveReport();
+    await test_workers();
 })();
