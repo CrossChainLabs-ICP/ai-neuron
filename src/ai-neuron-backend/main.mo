@@ -176,7 +176,7 @@ shared(msg) actor class ReportsStorage() {
         if (( workers[idx] != null) and (workersItems[idx] < maxItems)) {
           switch (workers[idx]) {
             case (?worker) {
-              let items = await worker.saveReport(proposalID, proposalTitle, report);
+              let items = await worker.save_report(proposalID, proposalTitle, report);
               workersItems[idx] := items;
               if ((items >= maxItems) and (idx + 1 == nextWorkerId)) {
                 shouldScale := true;

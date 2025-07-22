@@ -51,7 +51,7 @@ shared(msg) actor class Worker() {
   };
 
 
-  public shared ({ caller }) func saveReport(proposalID : Text, proposalTitle : Text, report : Text): async Nat {
+  public shared ({ caller }) func save_report(proposalID : Text, proposalTitle : Text, report : Text): async Nat {
     assert (owner == caller);
     
     let item: Types.ReportItem = {
@@ -65,12 +65,22 @@ shared(msg) actor class Worker() {
     return reportsBuffer.size();
   };
 
-  public query func get_list(): async [Text] {
-    return Buffer.toArray(reportsBuffer);
+  public query func get_reports_list(start : Nat, size : Nat): async [Text] {
+    if ((start >= 0) and (start < reportsBuffer.size()) ) {
+      var length = size;
+
+      if (start + size >= reportsBuffer.size()) {
+        length := reportsBuffer.size() - start;
+      };
+      let subBuffer = Buffer.subBuffer(reportsBuffer, start, length);
+      return Buffer.toArray(subBuffer);
+    };
+    
+    return [];
   };
 
-  public query func get(key : Text): async Types.ReportItem {
-    switch (dataMap.get(key)) {
+  public query func get_report(proposalID : Text): async Types.ReportItem {
+    switch (dataMap.get(proposalID)) {
       case (?d) {
         return d;
       };
@@ -86,15 +96,15 @@ shared(msg) actor class Worker() {
     };
   };
 
-  public query func get_items(keys : [Text]): async [Types.ReportItem] {
+  public query func get_full_reports(proposalIDs : [Text]): async [Types.ReportItem] {
     var result : List.List<Types.ReportItem> = List.nil();
 
-    if (Array.size(keys) > maxGetItems) {
+    if (Array.size(proposalIDs) > maxGetItems) {
       return List.toArray(result);
     };
     
-    for (key in keys.vals()) {
-      switch (dataMap.get(key)) {
+    for (proposalID in proposalIDs.vals()) {
+      switch (dataMap.get(proposalID)) {
         case (?d) {
           result := List.push(d, result);
         };

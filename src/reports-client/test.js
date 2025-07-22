@@ -91,12 +91,17 @@ async function test_workers() {
 
     for (const w of workers) {
         const worker = createWorkerActor(w, { agent });
-        const reportIDsList = await worker.get_list();
+        const reportIDsList = await worker.get_reports_list(0, 10);
+        console.log('reportIDsList:');
         console.log(reportIDsList);
         for ( const id of reportIDsList ) {
-            const fullReport = await worker.get_items([id]);
+            const fullReport = await worker.get_report(id);
             console.log(fullReport);
         }
+
+        console.log('allReports:');
+        const allReports =  await worker.get_full_reports(reportIDsList);
+        console.log(allReports);
     }
 }
 

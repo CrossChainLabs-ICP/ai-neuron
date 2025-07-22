@@ -9,10 +9,10 @@ export interface ReportItem {
 }
 export interface Worker {
   'balance' : ActorMethod<[], bigint>,
-  'get' : ActorMethod<[string], ReportItem>,
-  'get_items' : ActorMethod<[Array<string>], Array<ReportItem>>,
-  'get_list' : ActorMethod<[], Array<string>>,
-  'saveReport' : ActorMethod<[string, string, string], bigint>,
+  'get_full_reports' : ActorMethod<[Array<string>], Array<ReportItem>>,
+  'get_report' : ActorMethod<[string], ReportItem>,
+  'get_reports_list' : ActorMethod<[bigint, bigint], Array<string>>,
+  'save_report' : ActorMethod<[string, string, string], bigint>,
 }
 export interface _SERVICE extends Worker {}
 export declare const idlFactory: IDL.InterfaceFactory;
