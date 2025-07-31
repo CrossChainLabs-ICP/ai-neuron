@@ -20,6 +20,19 @@ function formatDate(isoDate) {
   return date.toLocaleDateString("en-US", options);
 }
 
+function base64ToObject(base64Str) {
+  let jsonStr;
+
+  if (typeof atob === 'function') {
+    // Browser environment
+    jsonStr = atob(base64Str);
+  } else {
+    // Node.js environment
+    jsonStr = Buffer.from(base64Str, 'base64').toString('utf8');
+  }
+  return JSON.parse(jsonStr);
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
   
@@ -56,7 +69,10 @@ export default function Dashboard() {
             try {
                 const client = new ClientICP();
                 const latest_reports = await client.get_full_reports(0, 10);
-                console.log('latest_reports', latest_reports);
+                //console.log('latest_reports', latest_reports);
+                console.log(latest_reports[0].proposalID);
+                console.log(base64ToObject(latest_reports[0].proposalTitle));
+                console.log(base64ToObject(latest_reports[0].report));
 
 
 

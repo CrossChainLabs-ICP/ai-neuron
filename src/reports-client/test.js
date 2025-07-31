@@ -12,7 +12,7 @@ import path from 'path';
 //import { uploader } from './config';
 
 const getSecp256k1Identity = () => {
-    let filePath = '~/.config/dfx/identity/ai-neuron/identity.pem';
+    let filePath = '~/CCL/CrossChainLabs-ICP/identity/identity.pem';
     const rawKey = fs.readFileSync(path.resolve(filePath.replace(/^~(?=$|\/|\\)/, process.env.HOME || process.env.USERPROFILE))).toString();
     
 

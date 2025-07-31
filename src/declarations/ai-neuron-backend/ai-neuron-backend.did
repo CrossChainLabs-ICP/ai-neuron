@@ -4,7 +4,8 @@ type ReportsStorage =
    balance: () -> (nat) query;
    delete_workers: () -> ();
    get_workers: () -> (vec text) query;
-   saveReport: (text, text, text) -> (bool);
-   upgrade: (blob) -> ();
+   saveReport: (proposalID: text, proposalTitle: text, report: text) ->
+    (bool);
+   upgrade: (wasmModule: blob) -> ();
  };
 service : () -> ReportsStorage
