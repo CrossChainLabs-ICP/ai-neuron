@@ -5,7 +5,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
-import ReportPage from './pages/ReportPage';
+import ReportDetails from "./pages/ReportDetails";
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/reports/:id" element={<ReportPage />} />
+          <Route path="/reports/:id" element={<ReportDetails />} />
         </Routes>
       </Layout>
     </BrowserRouter>
