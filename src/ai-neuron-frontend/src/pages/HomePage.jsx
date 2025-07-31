@@ -39,8 +39,11 @@ function base64ToObject(base64Str) {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [reports, setReports] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const [reports, setReports] = useState([]);     // accumulated list
+  const [page, setPage] = useState(0);            // which “page” we’re on
+  const [hasMore, setHasMore] = useState(true);   // whether more pages exist
+  const [loading, setLoading] = useState(false);  // show spinner while fetching
 
   const COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
   const severityStyles = {
@@ -72,11 +75,20 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function load() {
+      if (loading || !hasMore) return;
+
+      setLoading(true);
       try {
         const client = new ClientICP();
-        const raw = await client.get_full_reports(0, 10);
+
+        const offset = page * 5;
+        const raw = await client.get_full_reports(offset, 5);
+
+        if (raw.length < 5) {
+          setHasMore(false);
+        }
+
         const items = raw.map(r => {
-          // Decode title and report
           const decodedTitle = base64ToObject(r.proposalTitle);
           const decodedReport = base64ToObject(r.report);
           return {
@@ -84,15 +96,18 @@ export default function Dashboard() {
             title: decodedTitle
           };
         });
-        setReports(items);
+
+        setReports(prev => [...prev, ...items]);
+        setPage(prev => prev + 1);
+
       } catch (err) {
-        console.error(err);
+        console.error("Error loading reports:", err);
       } finally {
         setLoading(false);
       }
     }
     load();
-  }, []);
+  }, [page, loading]);
 
   return (
     <Box
