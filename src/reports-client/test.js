@@ -102,6 +102,7 @@ async function test_workers() {
         console.log('allReports:');
         const allReports =  await worker.get_full_reports(reportIDsList);
         console.log(allReports);
+        console.log(allReports?.length);
     }
 }
 
