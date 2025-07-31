@@ -58,15 +58,15 @@ export default function AINeuronNavbar() {
             gap: 3,
           }}
         >
-          <Button component={Link} to="/dashboard" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
+          <Button component={Link} to="/" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
             Reports
           </Button>
-          <Button component={Link} to="/about" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
+          {/*<Button component={Link} to="/about" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
             About
           </Button>
           <Button component={Link} to="/contact" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
             Contact
-          </Button>
+          </Button>*/}
         </Box>
 
 

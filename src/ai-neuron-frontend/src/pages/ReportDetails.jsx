@@ -44,7 +44,7 @@ export default function ReportDetails() {
 
         const payload = base64ToObject(found.report);
         const titleObj = base64ToObject(found.proposalTitle);
-        setReport({ ...payload, title: titleObj.title });
+        setReport({ ...payload, title: titleObj });
       } catch (e) {
         console.error(e);
       } finally {
@@ -85,14 +85,40 @@ export default function ReportDetails() {
   ];
   const COLORS = { High: '#FF6666', Medium: '#FFA500', Low: '#4CAF50' };
 
+  const severityStyles = {
+    high: {
+      backgroundColor: COLORS.High,
+      color: "#fff",
+      padding: "2px 6px",
+      borderRadius: 4,
+      fontWeight: "bold",
+      textTransform: "capitalize"
+    },
+    medium: {
+      backgroundColor: COLORS.Medium,
+      color: "#fff",
+      padding: "2px 6px",
+      borderRadius: 4,
+      fontWeight: "bold",
+      textTransform: "capitalize"
+    },
+    low: {
+      backgroundColor: COLORS.Low,
+      color: "#fff",
+      padding: "2px 6px",
+      borderRadius: 4,
+      fontWeight: "bold",
+      textTransform: "capitalize"
+    }
+  };
   // Filter out zero-value slices to prevent overlapping labels
   const filteredData = data.filter(entry => entry.value > 0);
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, background: '#f9fafb', minHeight: '100vh' }}>
       <Paper elevation={4} sx={{ p: { xs: 2, md: 3 }, maxWidth: 900, mx: 'auto' }}>
-        <Typography variant="h4" gutterBottom>
-          Proposal #{id}: {title}
+        <Typography variant="h5" gutterBottom>
+          Proposal {id}: {title}
         </Typography>
         <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
           {new Date(Number(timestamp) * 1000).toLocaleString()}
@@ -146,9 +172,11 @@ export default function ReportDetails() {
                 {issues.map((iss, idx) => (
                   <TableRow key={idx} hover>
                     <TableCell>{iss.line}</TableCell>
-                    <TableCell sx={{ textTransform: 'capitalize', color: COLORS[iss.severity.charAt(0).toUpperCase() + iss.severity.slice(1)], fontWeight: 'bold' }}>
-                      {iss.severity}
-                    </TableCell>
+                      <TableCell>
+                        <span style={severityStyles[iss.severity]}>
+                          {iss.severity}
+                        </span>
+                      </TableCell>
                     <TableCell sx={{ maxWidth: 200, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {iss.file}
                     </TableCell>
