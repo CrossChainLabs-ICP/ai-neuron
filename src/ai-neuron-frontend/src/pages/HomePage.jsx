@@ -107,7 +107,7 @@ export default function Dashboard() {
       }
     }
     load();
-  }, [page, loading]);
+  }, [page, loading, hasMore]);
 
   return (
     <Box
