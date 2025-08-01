@@ -54,11 +54,11 @@ export default function AINeuronNavbar() {
           sx={{
             flexGrow: 1,
             display: { xs: "none", md: "flex" },
-            justifyContent: "center",
+            //justifyContent: "center",
             gap: 3,
           }}
         >
-          <Button component={Link} to="/" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
+          <Button component={Link} to="/" sx={{ ml: "auto", color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
             Reports
           </Button>
           {/*<Button component={Link} to="/about" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
