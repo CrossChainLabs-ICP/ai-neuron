@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 
-import logoAINeuron from "/logo2.svg";
+import logoAINeuron from "/favicon.svg";
 
 export default function AINeuronNavbar() {
   return (
