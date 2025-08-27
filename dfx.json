@@ -20,12 +20,16 @@
       ],
       "type": "assets",
       "workspace": "ai-neuron-frontend"
+    },
+    "ai-neuron-ocbot": {
+      "main": "src/ai-neuron-ocbot/main.mo",
+      "type": "motoko"
     }
   },
   "defaults": {
     "build": {
       "args": "",
-      "packtool": ""
+      "packtool": "mops sources"
     }
   },
   "output_env_file": ".env",

@@ -1,0 +1,55 @@
+type UpdateResponse = 
+ record {
+   body: blob;
+   headers: vec Header;
+   status_code: nat16;
+   streaming_strategy: opt StreamingStrategy;
+ };
+type UpdateRequest = 
+ record {
+   body: blob;
+   headers: vec Header;
+   method: text;
+   url: text;
+ };
+type StreamingToken = blob;
+type StreamingStrategy = variant {
+                           Callback:
+                            record {
+                              callback: StreamingCallback;
+                              token: StreamingToken;
+                            };};
+type StreamingCallbackResponse = 
+ record {
+   body: blob;
+   token: opt StreamingToken;
+ };
+type StreamingCallback = func (StreamingToken) ->
+                          (opt StreamingCallbackResponse) query;
+type Response = 
+ record {
+   body: blob;
+   headers: vec Header;
+   status_code: nat16;
+   streaming_strategy: opt StreamingStrategy;
+   upgrade: opt bool;
+ };
+type Request = 
+ record {
+   body: blob;
+   certificate_version: opt nat16;
+   headers: vec Header;
+   method: text;
+   url: text;
+ };
+type PingBot = 
+ service {
+   http_request: (request: Request) -> (Response) query;
+   http_request_update: (request: UpdateRequest) -> (UpdateResponse);
+ };
+type Header = 
+ record {
+   text;
+   text;
+ };
+service : (key: text) -> PingBot
