@@ -10,7 +10,7 @@ import IC "./ic.types";
 import Workers "./worker";
 import Whitelist "./whitelist";
 
-shared(msg) actor class ReportsStorage() {
+shared(msg) persistent actor class ReportsStorage() {
   type Worker = Workers.Worker;
 
   let owner = msg.caller;
@@ -27,7 +27,7 @@ shared(msg) actor class ReportsStorage() {
   var workersItems : [var Nat] = Array.init<Nat>(maxWorkers, 0);
   var workers : [var ?Worker] = Array.init(maxWorkers, null);
 
-  let admins = TrieMap.fromEntries<Text, Nat32>(Whitelist.Admins.vals(), Text.equal, Text.hash);
+  transient let admins = TrieMap.fromEntries<Text, Nat32>(Whitelist.Admins.vals(), Text.equal, Text.hash);
 
   system func preupgrade() {
     workersEntries := workers;
@@ -171,6 +171,8 @@ shared(msg) actor class ReportsStorage() {
     var idx = 0;
     var added = false;
     var shouldScale = false;
+
+    //publish reports to ocbot
 
     while ((idx < nextWorkerId) and (not added)) {
         if (( workers[idx] != null) and (workersItems[idx] < maxItems)) {

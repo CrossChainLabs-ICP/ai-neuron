@@ -8,16 +8,16 @@ import List "mo:base/List";
 
 import Types "./types";
 
-shared(msg) actor class Worker() {
-  let owner = msg.caller;
-  let maxItems : Nat = 10000;
-  let maxGetItems : Nat = 10;
+shared(msg) persistent actor class Worker() {
+  stable let owner = msg.caller;
+  stable let maxItems : Nat = 10000;
+  stable let maxGetItems : Nat = 10;
   
   stable var reportsBufferEntries : [Text] = [];
   stable var dataMapEntries : [(Text, Types.ReportItem)] = [];
 
-  private var reportsBuffer = Buffer.Buffer<Text>(maxItems);
-  private let dataMap = TrieMap.fromEntries<Text, Types.ReportItem>(dataMapEntries.vals(), Text.equal, Text.hash);
+  transient var reportsBuffer = Buffer.Buffer<Text>(maxItems);
+  transient let dataMap = TrieMap.fromEntries<Text, Types.ReportItem>(dataMapEntries.vals(), Text.equal, Text.hash);
 
   reportsBufferEntries := [];
   dataMapEntries := [];
