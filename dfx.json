@@ -4,13 +4,6 @@
       "main": "src/ai-neuron-backend/main.mo",
       "type": "motoko"
     },
-    "ai-neuron-backend-worker": {
-      "type": "motoko",
-      "main": "src/ai-neuron-backend/worker.mo",
-      "declarations": {
-        "node_compatibility": true
-      }
-    },
     "ai-neuron-frontend": {
       "dependencies": [
         "ai-neuron-backend"

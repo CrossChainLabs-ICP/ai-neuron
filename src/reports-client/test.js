@@ -1,7 +1,6 @@
 import fetch from "isomorphic-fetch";
 import { HttpAgent } from "@dfinity/agent";
 import { createActor } from "../declarations/ai-neuron-backend/index.js";
-import { createActor as createWorkerActor } from "../declarations/ai-neuron-backend-worker/index.js";
 import { Secp256k1KeyIdentity } from "@dfinity/identity-secp256k1";
 
 import { config } from './config.js';
@@ -12,10 +11,9 @@ import path from 'path';
 //import { uploader } from './config';
 
 const getSecp256k1Identity = () => {
-    let filePath = '~/CCL/CrossChainLabs-ICP/identity/identity.pem';
+    let filePath = config.identityFile;
     const rawKey = fs.readFileSync(path.resolve(filePath.replace(/^~(?=$|\/|\\)/, process.env.HOME || process.env.USERPROFILE))).toString();
     
-
     return Secp256k1KeyIdentity.fromSecretKey(
         pemfile.decode(rawKey.replace(/(\n)\s+/g, '$1'),).slice(7, 39),);
 };
@@ -47,35 +45,19 @@ async function test_saveReport() {
 
     const actor = createActor(config.canister_id, { agent });
 
-    const status = await actor.autoscale();
-    if (status == 0) {
-        console.log(`autoscale succesful`);
-    } else {
-        console.log(`autoscale failed, error code: ${status}`);
-    }
-
     for (let i = 0; i < 20; i++) {
         const proposalID = `proposal${i}`;
-        const shouldScale = await actor.saveReport(
+        const result = await actor.saveReport(
             proposalID, //proposalID
             'title1', //proposalTitle
             'base64Report', //report
         );
 
-        if (shouldScale) {
-            const status = await se_actor.autoscale();
-            if (status == 0) {
-                console.log(`autoscale succesful`);
-            } else {
-                console.log(`autoscale failed, error code: ${status}`);
-            }
-        }
-
-        console.log(`Added ${proposalID}`);
+        console.log(`Added ${proposalID}, result: ${result}`);
     }
 }
 
-async function test_workers() {
+async function test_getReports() {
     const identity = getSecp256k1Identity();
 
     const agent = new HttpAgent({
@@ -85,28 +67,23 @@ async function test_workers() {
     });
 
     const actor = createActor(config.canister_id, { agent });
-    const workers = await actor.get_workers();
 
-    console.log(workers);
-
-    for (const w of workers) {
-        const worker = createWorkerActor(w, { agent });
-        const reportIDsList = await worker.get_reports_list(0, 10);
-        console.log('reportIDsList:');
-        console.log(reportIDsList);
-        for ( const id of reportIDsList ) {
-            const fullReport = await worker.get_report(id);
-            console.log(fullReport);
-        }
-
-        console.log('allReports:');
-        const allReports =  await worker.get_full_reports(reportIDsList);
-        console.log(allReports);
-        console.log(allReports?.length);
+    const reportIDsList = await actor.get_reports_list(0, 10);
+    console.log('reportIDsList:');
+    console.log(reportIDsList);
+    for (const id of reportIDsList) {
+        const fullReport = await actor.get_report(id);
+        console.log(fullReport);
     }
+
+    console.log('allReports:');
+    const allReports = await actor.get_full_reports(reportIDsList);
+    console.log(allReports);
+    console.log(allReports?.length);
+
 }
 
 (async () => {
     //await test_saveReport();
-    await test_workers();
+    await test_getReports();
 })();

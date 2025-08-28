@@ -9,7 +9,7 @@ import Events "events";
 import Metrics "metrics";
 import State "state";
 
-persistent actor class PingBot(key : Text) {
+persistent actor class OCBot(key : Text) {
     var stableState = State.new();
 
     transient let ocPublicKey = Sdk.parsePublicKeyOrTrap(key);
