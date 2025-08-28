@@ -42,7 +42,7 @@ type Request =
    method: text;
    url: text;
  };
-type PingBot = 
+type OCBot = 
  service {
    http_request: (request: Request) -> (Response) query;
    http_request_update: (request: UpdateRequest) -> (UpdateResponse);
@@ -52,4 +52,4 @@ type Header =
    text;
    text;
  };
-service : (key: text) -> PingBot
+service : (key: text) -> OCBot

@@ -42,10 +42,10 @@ export const idlFactory = ({ IDL }) => {
     'streaming_strategy' : IDL.Opt(StreamingStrategy),
     'status_code' : IDL.Nat16,
   });
-  const PingBot = IDL.Service({
+  const OCBot = IDL.Service({
     'http_request' : IDL.Func([Request], [Response], ['query']),
     'http_request_update' : IDL.Func([UpdateRequest], [UpdateResponse], []),
   });
-  return PingBot;
+  return OCBot;
 };
 export const init = ({ IDL }) => { return [IDL.Text]; };

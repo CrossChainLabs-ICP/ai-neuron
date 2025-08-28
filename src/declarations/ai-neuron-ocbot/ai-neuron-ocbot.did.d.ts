@@ -3,7 +3,7 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export type Header = [string, string];
-export interface PingBot {
+export interface OCBot {
   'http_request' : ActorMethod<[Request], Response>,
   'http_request_update' : ActorMethod<[UpdateRequest], UpdateResponse>,
 }
@@ -45,6 +45,6 @@ export interface UpdateResponse {
   'streaming_strategy' : [] | [StreamingStrategy],
   'status_code' : number,
 }
-export interface _SERVICE extends PingBot {}
+export interface _SERVICE extends OCBot {}
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];
