@@ -5,6 +5,7 @@ import Timer "mo:base/Timer";
 import Base "mo:openchat-bot-sdk/api/common/base";
 import Chat "mo:openchat-bot-sdk/api/common/chat";
 import Client "mo:openchat-bot-sdk/client";
+import ReportsStorage "canister:ai-neuron-backend";
 
 module {
     let maxIterations : Nat8 = 100;
@@ -91,6 +92,7 @@ module {
                             interval = record.interval;
                             timerId = record.timerId;
                             apiGateway = record.apiGateway;
+                            //todo update reports map
                             iterations = record.iterations + 1;
                         };
 
@@ -101,9 +103,16 @@ module {
                     };
                 };
 
-                ignore await client
-                    .sendTextMessage("AI Neuron Report : ")
+                let reports_ids_list = await ReportsStorage.get_reports_list(0, 1);
+
+                for (id in reports_ids_list.vals()) {
+
+                    let report = await ReportsStorage.get_report(id);
+
+                    ignore await client
+                    .sendTextMessage("AI Neuron Report : https://kcyll-maaaa-aaaak-quk5q-cai.icp0.io/reports/" # report.proposalID)
                     .execute();
+                };
             };
         };
     };
@@ -113,5 +122,6 @@ module {
         timerId : Timer.TimerId;
         apiGateway : Base.CanisterId;
         iterations : Nat8;
+        //todo add map of report_ids already sent
     };
 };
