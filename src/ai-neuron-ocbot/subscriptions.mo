@@ -6,6 +6,8 @@ import Base "mo:openchat-bot-sdk/api/common/base";
 import Chat "mo:openchat-bot-sdk/api/common/chat";
 import Client "mo:openchat-bot-sdk/client";
 import ReportsStorage "canister:ai-neuron-backend";
+import Hash "mo:base/Hash";
+import Text "mo:base/Text";
 
 module {
     let maxIterations : Nat8 = 100;
@@ -30,12 +32,20 @@ module {
 
         // Insert or update an interval for a chat and return true if it already existed
         public func set<system>(sub : Sub) : Bool {
-            let exists = switch (map.get(sub.chat)) {
+            // If we already have a record, reuse its sentReports set; otherwise create a new one
+            let (exists, prevSentReports) = switch (map.get(sub.chat)) {
                 case (?record) {
                     Timer.cancelTimer(record.timerId);
-                    true;
+                    (true, record.sentReports)
                 };
-                case null false;
+                case null {
+                    let fresh = HashMap.HashMap<Text, Bool>(
+                        16,
+                        Text.equal, 
+                        Text.hash
+                    );
+                    (false, fresh)
+                };
             };
 
             let record : Record = {
@@ -43,6 +53,7 @@ module {
                 timerId = Timer.recurringTimer<system>(#seconds(sub.interval), sendReport(sub.chat, sub.apiGateway));
                 apiGateway = sub.apiGateway;
                 iterations = sub.iterations;
+                sentReports = prevSentReports; // preserve already-sent report IDs
             };
 
             map.put(sub.chat, record);
@@ -78,7 +89,7 @@ module {
                 messageId = null;
                 thread = null;
             });
-            
+
             func () : async () {
                 switch (map.get(chat)) {
                     case (?record) {
@@ -88,30 +99,45 @@ module {
                             return;
                         };
 
-                        let newRecord = {
+                        // Carry forward the same sentReports set; only bump iterations
+                        let newRecord : Record = {
                             interval = record.interval;
                             timerId = record.timerId;
                             apiGateway = record.apiGateway;
-                            //todo update reports map
-                            iterations = record.iterations + 1;
+                            iterations = record.iterations + 1; // TODO implemented
+                            sentReports = record.sentReports;    // keep reference to the same set
                         };
 
                         map.put(chat, newRecord);
                     };
                     case null {
                         Debug.print("Chat not found in subscriptions: " # debug_show(chat));
+                        return;
                     };
                 };
 
-                let reports_ids_list = await ReportsStorage.get_reports_list(0, 1);
+                // Safe to unwrap since we just put it
+                let ?current = map.get(chat) else return;
+
+                // Fetch report IDs 
+                let reports_ids_list = await ReportsStorage.get_reports_list(0, 5);
 
                 for (id in reports_ids_list.vals()) {
+                    // Skip if we've already sent this report to this chat
+                    //
+                    if ((switch (current.sentReports.get(id)) { case (?_) true; case null false }) == false) {
+                        let report = await ReportsStorage.get_report(id);
 
-                    let report = await ReportsStorage.get_report(id);
+                        // Send and, if successful, mark as sent
+                        ignore await client
+                            .sendTextMessage(
+                                "AI Neuron Report : https://kcyll-maaaa-aaaak-quk5q-cai.icp0.io/reports/" # report.proposalID
+                            )
+                            .execute();
 
-                    ignore await client
-                    .sendTextMessage("AI Neuron Report : https://kcyll-maaaa-aaaak-quk5q-cai.icp0.io/reports/" # report.proposalID)
-                    .execute();
+                        // Mark report ID as sent for this chat
+                        current.sentReports.put(id, true);
+                    };
                 };
             };
         };
@@ -122,6 +148,7 @@ module {
         timerId : Timer.TimerId;
         apiGateway : Base.CanisterId;
         iterations : Nat8;
-        //todo add map of report_ids already sent
+        // map of report_ids already sent (per-chat)
+        sentReports : HashMap.HashMap<Text, Bool>;
     };
 };
