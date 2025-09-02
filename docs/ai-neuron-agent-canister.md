@@ -1,7 +1,7 @@
 ## AI Neuron
 
 ### AI Neuron Agent
-- Integrates with Eliza runtime and multiple LLMs.
+- Integrates with Eliza runtime.
 - Fetches proposals via the NNS plugin.
 - Pulls associated code diffs and runs AI verification (vulnerabilities & quality).
 - Produces a structured report (JSON) with findings and severities.
