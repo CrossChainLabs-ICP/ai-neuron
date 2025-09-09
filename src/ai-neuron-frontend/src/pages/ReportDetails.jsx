@@ -44,31 +44,51 @@ function buildRepoUrl(repository, filePath) {
   return repoUrl;
 }
 
+async function fetchAllReports(client, start = 0, size = 10) {
+  const all = [];
+  let offset = start;
+
+  while (true) {
+    const page = await client.get_full_reports(offset, size);
+    if (!Array.isArray(page) || page.length === 0) break;
+
+    all.push(...page);
+
+    if (page.length < size) break;
+
+    offset += page.length;
+  }
+
+  return all;
+}
+
 export default function ReportDetails() {
   const { id } = useParams();
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchReport() {
-      try {
-        const client = new ClientICP();
-        const all = await client.get_full_reports(0, 100);
-        const found = all.find(r => r.proposalID === id);
-        if (!found) throw new Error("Report not found");
+useEffect(() => {
+  async function fetchReport() {
+    try {
+      const client = new ClientICP();
 
-        const payload = base64ToObject(found.report);
-        const titleObj = base64ToObject(found.proposalTitle);
+      const all = await fetchAllReports(client, 0, 10);
 
-        setReport({ ...payload, title: titleObj });
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
+      const found = all.find(r => String(r.proposalID) === String(id));
+      if (!found) throw new Error("Report not found");
+
+      const payload = base64ToObject(found.report);
+      const titleObj = base64ToObject(found.proposalTitle);
+
+      setReport({ ...payload, title: titleObj });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
     }
-    fetchReport();
-  }, [id]);
+  }
+  fetchReport();
+}, [id]);
 
   if (loading) {
     return (
