@@ -83,7 +83,7 @@ export default function ReportDetails() {
     { name: 'Medium', value: counts.medium || 0 },
     { name: 'Low', value: counts.low || 0 }
   ];
-  const COLORS = { High: '#FF6666', Medium: '#FFA500', Low: '#4CAF50' };
+  const COLORS = { High: '#FF6666', Medium: '#fd7e00', Low: '#299f2e' };
 
   const severityStyles = {
     high: {
@@ -91,7 +91,6 @@ export default function ReportDetails() {
       color: "#fff",
       padding: "2px 6px",
       borderRadius: 4,
-      fontWeight: "bold",
       textTransform: "capitalize"
     },
     medium: {
@@ -99,7 +98,6 @@ export default function ReportDetails() {
       color: "#fff",
       padding: "2px 6px",
       borderRadius: 4,
-      fontWeight: "bold",
       textTransform: "capitalize"
     },
     low: {
@@ -107,7 +105,6 @@ export default function ReportDetails() {
       color: "#fff",
       padding: "2px 6px",
       borderRadius: 4,
-      fontWeight: "bold",
       textTransform: "capitalize"
     }
   };
@@ -117,8 +114,11 @@ export default function ReportDetails() {
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, background: '#f9fafb', minHeight: '100vh' }}>
       <Paper elevation={4} sx={{ p: { xs: 2, md: 3 }, maxWidth: 900, mx: 'auto' }}>
-        <Typography variant="h5" gutterBottom>
-          Proposal {id}: {title}
+      <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ mb: 2 }}>
+          Proposal {id} 
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {title}
         </Typography>
         <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
           {new Date(Number(timestamp) * 1000).toLocaleString()}
@@ -126,10 +126,10 @@ export default function ReportDetails() {
 
         <Divider sx={{ my: 3 }} />
 
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom fontWeight="bold">
           Severity Overview
         </Typography>
-        <Box sx={{ width: '100%', height: 300, mb: 4 }}>
+        <Box sx={{ width: '100%', height: 300 }}>
           <ResponsiveContainer>
             <PieChart>
               <Pie
@@ -138,24 +138,49 @@ export default function ReportDetails() {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                outerRadius={100}
                 labelLine={false}
               >
                 {filteredData.map(entry => (
                   <Cell key={entry.name} fill={COLORS[entry.name]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => value} />
-              <Legend verticalAlign="bottom" height={36} />
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const { name, value, payload: sliceData } = payload[0];
+                    return (
+                      <div
+                        style={{
+                          fontSize: "16px",
+                          fontWeight: 500,
+                          color: COLORS[sliceData.name],
+                          background: "#fff",
+                          border: `1px solid ${COLORS[sliceData.name]}`,
+                          borderRadius: "6px",
+                          padding: "4px 8px",
+                        }}
+                      >
+                        {name}: {value}
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Legend 
+                verticalAlign="bottom" 
+                height={32}
+                wrapperStyle={{ marginTop: 12 }} 
+              />
             </PieChart>
           </ResponsiveContainer>
         </Box>
 
         <Divider sx={{ my: 3 }} />
 
-        <Typography variant="h6" gutterBottom>
-          Audit Issues
+        <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ mb: 3 }}>
+          Audit Findings
         </Typography>
         {issues.length > 0 ? (
           <TableContainer component={Paper} variant="outlined">

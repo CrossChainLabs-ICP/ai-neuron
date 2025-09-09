@@ -134,7 +134,7 @@ export default function Dashboard() {
                   <TableCell><strong>Date</strong></TableCell>
                   <TableCell><strong>Issues</strong></TableCell>
                   <TableCell><strong>Top Severity</strong></TableCell>
-                  <TableCell align="right"><strong>Action</strong></TableCell>
+                  <TableCell align="right"><strong>Report</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
