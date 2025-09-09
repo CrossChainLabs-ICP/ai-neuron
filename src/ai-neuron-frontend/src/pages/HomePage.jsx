@@ -78,11 +78,12 @@ export default function Dashboard() {
       setLoading(true);
       try {
         const client = new ClientICP();
+        const pageSize = 10;
 
-        const offset = page * 5;
-        const raw = await client.get_full_reports(offset, 5);
+        const offset = page * pageSize;
+        const raw = await client.get_full_reports(offset, pageSize);
 
-        if (raw.length < 5) {
+        if (raw.length < pageSize) {
           setHasMore(false);
         }
 
