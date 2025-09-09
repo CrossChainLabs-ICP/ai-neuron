@@ -59,7 +59,7 @@ export default function ReportDetails() {
 
         const payload = base64ToObject(found.report);
         const titleObj = base64ToObject(found.proposalTitle);
-        console.log(payload);
+
         setReport({ ...payload, title: titleObj });
       } catch (e) {
         console.error(e);
