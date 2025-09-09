@@ -11,7 +11,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TableContainer
+  TableContainer,
+  Link
 } from "@mui/material";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ClientICP } from "../client-icp.js";
@@ -29,6 +30,20 @@ function base64ToObject(str) {
   return JSON.parse(json);
 }
 
+function buildRepoUrl(repository, filePath) {
+  if (!repository) return "";
+
+  let repoUrl = repository.replace(/\.git$/, "");
+
+  const isValidPath = filePath && typeof filePath === "string" && /^[^<>:"|?*]+$/.test(filePath);
+
+  if (isValidPath) {
+    return `${repoUrl}/tree/master/${filePath}`;
+  }
+
+  return repoUrl;
+}
+
 export default function ReportDetails() {
   const { id } = useParams();
   const [report, setReport] = useState(null);
@@ -44,6 +59,7 @@ export default function ReportDetails() {
 
         const payload = base64ToObject(found.report);
         const titleObj = base64ToObject(found.proposalTitle);
+        console.log(payload);
         setReport({ ...payload, title: titleObj });
       } catch (e) {
         console.error(e);
@@ -70,7 +86,7 @@ export default function ReportDetails() {
     );
   }
 
-  const { title, timestamp, audit } = report;
+  const { title, timestamp, audit, repository } = report;
   const issues = audit.issues || [];
 
   // Aggregate severities
@@ -114,12 +130,16 @@ export default function ReportDetails() {
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, background: '#f9fafb', minHeight: '100vh' }}>
       <Paper elevation={4} sx={{ p: { xs: 2, md: 3 }, maxWidth: 900, mx: 'auto' }}>
-      <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ mb: 2 }}>
-          Proposal {id} 
-        </Typography>
-        <Typography variant="h6" gutterBottom>
+        <Link href={`https://nns.ic0.app/proposal/?u=qoctq-giaaa-aaaaa-aaaea-cai&proposal=${id}`} passHref>
+          <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ mb: 2 }}>
+            Proposal {id}
+          </Typography>
+        </Link>
+
+        <Typography variant="h6" gutterBottom component="a">
           {title}
         </Typography>
+
         <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
           {new Date(Number(timestamp) * 1000).toLocaleString()}
         </Typography>
@@ -168,10 +188,10 @@ export default function ReportDetails() {
                   return null;
                 }}
               />
-              <Legend 
-                verticalAlign="bottom" 
+              <Legend
+                verticalAlign="bottom"
                 height={32}
-                wrapperStyle={{ marginTop: 12 }} 
+                wrapperStyle={{ marginTop: 12 }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -197,14 +217,16 @@ export default function ReportDetails() {
                 {issues.map((iss, idx) => (
                   <TableRow key={idx} hover>
                     <TableCell>{iss.line}</TableCell>
-                      <TableCell>
-                        <span style={severityStyles[iss.severity]}>
-                          {iss.severity}
-                        </span>
-                      </TableCell>
-                    <TableCell sx={{ maxWidth: 200, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {iss.file}
+                    <TableCell>
+                      <span style={severityStyles[iss.severity]}>
+                        {iss.severity}
+                      </span>
                     </TableCell>
+                    <Link href={`${buildRepoUrl(repository, iss.file)}`} passHref>
+                      <TableCell sx={{ maxWidth: 200, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {iss.file}
+                      </TableCell>
+                    </Link>
                     <TableCell>{iss.issue}</TableCell>
                   </TableRow>
                 ))}
