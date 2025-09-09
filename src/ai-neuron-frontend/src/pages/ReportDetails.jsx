@@ -130,11 +130,31 @@ export default function ReportDetails() {
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, background: '#f9fafb', minHeight: '100vh' }}>
       <Paper elevation={4} sx={{ p: { xs: 2, md: 3 }, maxWidth: 900, mx: 'auto' }}>
-        <Link href={`https://nns.ic0.app/proposal/?u=qoctq-giaaa-aaaaa-aaaea-cai&proposal=${id}`} passHref>
-          <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ mb: 2 }}>
-            Proposal {id}
-          </Typography>
-        </Link>
+      <Link
+        href={`https://nns.ic0.app/proposal/?u=qoctq-giaaa-aaaaa-aaaea-cai&proposal=${id}`}
+        passHref
+        style={{ textDecoration: "none" }} // prevent default underline
+      >
+        <Typography
+          variant="h6"
+          gutterBottom
+          fontWeight="bold"
+          sx={{
+            mb: 2,
+            color: "black",
+            textDecoration: "underline",
+            textDecorationColor: "black",
+            transition: "color 0.2s ease",
+            "&:hover": {
+              color: "primary.main",   // or any color you like
+              textDecoration: "underline",
+              cursor: "pointer",
+            },
+          }}
+        >
+          Proposal {id}
+        </Typography>
+      </Link>
 
         <Typography variant="h6" gutterBottom component="a">
           {title}
@@ -215,20 +235,31 @@ export default function ReportDetails() {
               </TableHead>
               <TableBody>
                 {issues.map((iss, idx) => (
-                  <TableRow key={idx} hover>
-                    <TableCell>{iss.line}</TableCell>
-                    <TableCell>
-                      <span style={severityStyles[iss.severity]}>
-                        {iss.severity}
-                      </span>
-                    </TableCell>
-                    <Link href={`${buildRepoUrl(repository, iss.file)}`} passHref>
-                      <TableCell sx={{ maxWidth: 200, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {iss.file}
-                      </TableCell>
+                 <TableRow key={idx} hover>
+                  <TableCell>{iss.line}</TableCell>
+                  <TableCell>
+                    <span style={severityStyles[iss.severity]}>
+                      {iss.severity}
+                    </span>
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      maxWidth: 200,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis"
+                    }}
+                  >
+                    <Link
+                      href={buildRepoUrl(repository, iss.file)}
+                      passHref
+                      style={{ color: "black", textDecoration: "underline" }}
+                    >
+                      {iss.file}
                     </Link>
-                    <TableCell>{iss.issue}</TableCell>
-                  </TableRow>
+                  </TableCell>
+                  <TableCell>{iss.issue}</TableCell>
+                </TableRow>
                 ))}
               </TableBody>
             </Table>
