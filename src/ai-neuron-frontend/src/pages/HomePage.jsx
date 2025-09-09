@@ -45,14 +45,14 @@ export default function Dashboard() {
   const [hasMore, setHasMore] = useState(true);   // whether more pages exist
   const [loading, setLoading] = useState(false);  // show spinner while fetching
 
-  const COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
+  const COLORS = ["#FF6666", "#fd7e00", "#299f2e"];
+
   const severityStyles = {
     high: {
       backgroundColor: COLORS[0],
       color: "#fff",
       padding: "2px 6px",
       borderRadius: 4,
-      fontWeight: "bold",
       textTransform: "capitalize"
     },
     medium: {
@@ -60,7 +60,6 @@ export default function Dashboard() {
       color: "#fff",
       padding: "2px 6px",
       borderRadius: 4,
-      fontWeight: "bold",
       textTransform: "capitalize"
     },
     low: {
@@ -68,7 +67,6 @@ export default function Dashboard() {
       color: "#fff",
       padding: "2px 6px",
       borderRadius: 4,
-      fontWeight: "bold",
       textTransform: "capitalize"
     }
   };
@@ -117,14 +115,17 @@ export default function Dashboard() {
         background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)"
       }}
     >
-      <Typography variant="h4" color="white" mb={3}>
+      <Typography variant="h4" color="white" mb={3} sx={{ mx: { xs: 0, sm: 4, md: 8 }, p: 0 }}>
         Latest Proposal Audits
       </Typography>
 
       {loading ? (
         <CircularProgress color="inherit" />
       ) : reports && reports.length > 0 ? (
-        <Paper elevation={4}>
+        <Paper 
+          elevation={4} 
+          sx={{ mx: { xs: 0, sm: 4, md: 8 }, p: 2 }}
+        >
           <TableContainer>
             <Table>
               <TableHead>
