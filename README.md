@@ -19,15 +19,6 @@
 
 ---
 
-### Data Flow (high level)
-1. Plugin fetches proposals from NNS (with topic/status filters).
-2. Agent selects targets, pulls code diffs, runs AI analysis, formats a report.
-3. Agent persists `{proposalID, title, report}` on-chain via the canister.
-4. Web app lists proposals & renders decoded report details.
-5. OC Bot posts summaries and links when new reports land.
-
----
-
 ## Documentation
 - [Setup](#setup)
 - [Developer Guide](#developer-guide)
@@ -79,6 +70,15 @@ The repository includes:
 * **Frontend canister** (`ai-neuron-frontend`) – React app for users to interact with the system.
 * **Ocbot canister** (`ai-neuron-ocbot`) – handles orchestration, metrics, subscriptions, and event processing.
 * **Deployment scripts** – utilities for local and production deployment.
+
+---
+
+### Data Flow (high level)
+1. Plugin fetches proposals from NNS (with topic/status filters).
+2. Agent selects targets, pulls code diffs, runs AI analysis, formats a report.
+3. Agent persists `{proposalID, title, report}` on-chain via the canister.
+4. Web app lists proposals & renders decoded report details.
+5. OC Bot posts summaries and links when new reports land.
 
 ---
 
