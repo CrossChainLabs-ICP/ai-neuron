@@ -8,16 +8,12 @@
 - 💬 OpenChat bot notifications with deep links
 - 🌐 Web app to browse reports and reasoning
 
----
-
 ## System Components
 - [**Eliza NNS Plugin**](https://github.com/CrossChainLabs-ICP/plugin-icp-nns) — fetches and filters NNS proposals for downstream processing.
 - [**AI Neuron Agent**](https://github.com/CrossChainLabs-ICP/ai-neuron-agent) — retrieves proposals, analyzes associated code/commits, generates structured reports.
 - [**AI Neuron Canister**](https://github.com/CrossChainLabs-ICP/ai-neuron/tree/main/src/ai-neuron-backend) — on-chain storage for proposal metadata and AI-generated reports.
 - [**Web App**](https://github.com/CrossChainLabs-ICP/ai-neuron/tree/main/src/ai-neuron-frontend) — browses proposals, reports, insights, and decisions.
 - [**OC Bot**](https://github.com/CrossChainLabs-ICP/ai-neuron/tree/main/src/ai-neuron-ocbot) — posts new report notifications to OpenChat channels with links to the web app.
-
----
 
 ## Documentation
 - [Setup](#setup)
@@ -26,8 +22,6 @@
 - [Eliza NNS Plugin](#eliza-nns-plugin)
 - [AI Neuron Agent & Canister](#ai-neuron)
 - [Web App & OC Bot](#webapp-and-oc-bot)
-
----
 
 ## Setup
 
@@ -60,7 +54,6 @@ $ ./deploy-prod.sh
 # OC Bot (requires OpenChat public key)
 $ ./ocbot-deploy-prod.sh
 ```
----
 
 ## Developer Guide
 
@@ -71,16 +64,12 @@ The repository includes:
 * **Ocbot canister** (`ai-neuron-ocbot`) – handles orchestration, metrics, subscriptions, and event processing.
 * **Deployment scripts** – utilities for local and production deployment.
 
----
-
 ### Data Flow (high level)
 1. Plugin fetches proposals from NNS (with topic/status filters).
 2. Agent selects targets, pulls code diffs, runs AI analysis, formats a report.
 3. Agent persists `{proposalID, title, report}` on-chain via the canister.
 4. Web app lists proposals & renders decoded report details.
 5. OC Bot posts summaries and links when new reports land.
-
----
 
 ## Project Structure
 
@@ -118,8 +107,6 @@ ai-neuron/
 │       ├── state.mo
 │       └── subscriptions.mo
 ```
-
----
 
 ## Installation & Setup
 
@@ -176,16 +163,12 @@ To remove ocbot deployments:
 ./ocbot-delete-prod.sh
 ```
 
----
-
 ## Backend (Motoko)
 
 The backend canister (`ai-neuron-backend`) contains:
 
 * **main.mo** – Core logic and service entry points.
 * **types.mo** – Type definitions and shared data structures.
-
----
 
 ## Frontend (React/Vite)
 
@@ -207,8 +190,6 @@ Run the frontend in dev mode:
 npm run dev
 ```
 
----
-
 ## Ocbot Canister
 
 The **ocbot** is a Motoko-based Open Chat Bot designed to automatically posts a notification in a specific OpenChat group/channel when a new report is published.
@@ -222,8 +203,6 @@ Modules include:
 * `subscriptions.mo` – Subscription management.
 * `main.mo` – Entry point for the ocbot service.
 
----
-
 ## Development Workflow
 
 1. Write or modify Motoko code in `src/ai-neuron-backend` or `src/ai-neuron-ocbot`.
@@ -231,8 +210,6 @@ Modules include:
 3. Re-deploy updated canisters with `deploy-local.sh` or `ocbot-deploy-local.sh`.
 4. Update React frontend components in `src/ai-neuron-frontend/src`.
 5. Run frontend with `npm run dev` for live reloading.
-
----
 
 ## Contributing
 
@@ -242,8 +219,6 @@ Contributions are welcome! To propose changes:
 2. Create a feature branch (`git checkout -b feature-name`).
 3. Commit changes and push (`git push origin feature-name`).
 4. Open a Pull Request.
-
----
 
 ## Code Reference & Deep Dive
 
@@ -393,8 +368,6 @@ npm run build   # build to dist/
 * Keeps an **API key registry** keyed by chat/location; prunes on `#Uninstalled` lifecycle events.
 * Rebuilds recurring timers after upgrade by iterating stored `subscriptions` and calling `Timer.recurringTimer`.
 
----
-
 ## Deployment Scripts
 
 * **Backend**
@@ -407,8 +380,6 @@ npm run build   # build to dist/
   * `ocbot-delete-{local,prod}.sh` – stops & deletes the bot canister (no-withdrawal locally; `--network ic` in prod).
 
 > Note: The ocbot deploy scripts assume availability of the OpenChat public key and pass it to `OCBot` so JWTs can be verified server-side.
-
----
 
 ## Integration: [**ai‑neuron‑agent**](https://github.com/CrossChainLabs-ICP/ai-neuron-agent) → `saveReport`
 
@@ -469,8 +440,6 @@ This repository is designed to be fed by an external agent app — **ai-neuron-a
 5. **Frontend** lists IDs via `get_reports_list`, bulk reads via `get_full_reports`, and decodes Base64 to render summary, issue counts, and charts.
 6. **OCBot** periodically pulls new IDs and posts summaries to subscribed chats.
 
----
-
 ## User Guide
 
 ### What you can do
@@ -481,8 +450,6 @@ This repository is designed to be fed by an external agent app — **ai-neuron-a
 ### Web App Basics
 - **Home**: table of proposals with title, top severity and number of issues.
 - **Details**: charts of severities and full audit report.
-
----
 
 ## Eliza NNS Plugin
 
@@ -517,8 +484,6 @@ npm run dev   # hot reload
 npm run build
 ```
 
----
-
 ## AI Neuron
 
 ### AI Neuron Agent
@@ -539,8 +504,6 @@ const base64 = (o) => Buffer.from(JSON.stringify(o), 'utf8').toString('base64');
 await backend.saveReport(proposal.id, base64(proposal.title), base64(report));
 ```
 
----
-
 ## Webapp and OC Bot
 
 ### Web App
@@ -552,10 +515,7 @@ await backend.saveReport(proposal.id, base64(proposal.title), base64(report));
 - Each post includes a deep link to the web app.
 - Reconstructs timers after upgrades; deduplicates already-sent reports.
 
----
-
 ## License
 
 This project is licensed under the **AGPL-3.0 License**. See the [LICENSE](./LICENSE) file for details.
 
----
