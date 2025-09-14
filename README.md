@@ -471,7 +471,7 @@ const base64 = (o) => Buffer.from(JSON.stringify(o), 'utf8').toString('base64');
 await backend.saveReport(proposal.id, base64(proposal.title), base64(report));
 ```
 
-## Webapp and OC Bot
+## Web App and OC Bot
 
 ### Web App
 - Lists proposals with title, top severity and number of issues.
