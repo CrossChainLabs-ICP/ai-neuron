@@ -477,10 +477,18 @@ await backend.saveReport(proposal.id, base64(proposal.title), base64(report));
 - Lists proposals with title, top severity and number of issues.
 - Detail page shows charts (severity breakdown) and the full decoded report.
 
+**Example Web App**
+- **URL:** [https://kcyll-maaaa-aaaak-quk5q-cai.icp0.io/](https://kcyll-maaaa-aaaak-quk5q-cai.icp0.io/)
+
 ### OC Bot
 - Subscribes channels and posts notifications when new reports are stored.
 - Each post includes a deep link to the web app.
 - Reconstructs timers after upgrades; deduplicates already-sent reports.
+
+**Example AI Neuron OpenChat Bot**
+- **Principal:** `hzfck-wiaaa-aaaak-qulua-cai`
+- **URL:** [hzfck-wiaaa-aaaak-qulua-cai.raw.icp0.io](https://hzfck-wiaaa-aaaak-qulua-cai.raw.icp0.io/)
+- **How to install an OC Bot:** [https://www.youtube.com/watch?v=LmYwBWf_1gQ](https://www.youtube.com/watch?v=LmYwBWf_1gQ)
 
 ## License
 
