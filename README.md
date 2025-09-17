@@ -486,8 +486,8 @@ await backend.saveReport(proposal.id, base64(proposal.title), base64(report));
 - Reconstructs timers after upgrades; deduplicates already-sent reports.
 
 **Example AI Neuron OpenChat Bot**
-- **Principal:** `hzfck-wiaaa-aaaak-qulua-cai`
-- **URL:** [hzfck-wiaaa-aaaak-qulua-cai.raw.icp0.io](https://hzfck-wiaaa-aaaak-qulua-cai.raw.icp0.io/)
+- **Principal:** `fr75p-eiaaa-aaaak-qulya-cai`
+- **URL:** [https://fr75p-eiaaa-aaaak-qulya-cai.raw.icp0.io/](https://fr75p-eiaaa-aaaak-qulya-cai.raw.icp0.io/)
 - **How to install an OC Bot:** [https://www.youtube.com/watch?v=LmYwBWf_1gQ](https://www.youtube.com/watch?v=LmYwBWf_1gQ)
 
 ## License
